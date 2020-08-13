@@ -34,14 +34,6 @@ class AudioInputDevice extends React.Component<PropsInterface, StateInterface> {
     );
   }
 
-  tick() {
-    if(!this.state.analyser || !this.state.dataArray) return;
-    this.state.analyser.getByteTimeDomainData(this.state.dataArray)
-    const level = this.state.dataArray.reduce((a,b)=>Math.max(a,b));
-    this.setState({ level });
-    requestAnimationFrame(this.tick.bind(this));
-  }
-
   private async _start() {
       const context = new AudioContext();
       const stream = await navigator.mediaDevices.getUserMedia({audio: {deviceId: this.props.deviceInfo.deviceId}});
@@ -52,12 +44,20 @@ class AudioInputDevice extends React.Component<PropsInterface, StateInterface> {
       microphone.connect(analyser);
       analyser.connect(context.destination);
       this.setState({monitoring: true, context, analyser, dataArray});
-      this.tick();
+      this._tick();
   }
 
   private _stop() {
     this.state.context?.close();
     this.setState({monitoring: false});
+  }
+
+  private _tick() {
+    if(!this.state.analyser || !this.state.dataArray) return;
+    this.state.analyser.getByteTimeDomainData(this.state.dataArray)
+    const level = this.state.dataArray.reduce((a,b)=>Math.max(a,b));
+    this.setState({ level });
+    requestAnimationFrame(this._tick.bind(this));
   }
 }
 
