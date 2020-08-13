@@ -33,6 +33,10 @@ class App extends React.Component<PropsInterface, StateInterface> {
     );
   }
 
+  componentDidMount() {
+    this._refreshDevices();
+  }
+
   private async _refreshDevices() {
     console.log('refresh');
     const devices: InputDeviceInfo[] = (await navigator.mediaDevices.enumerateDevices())
