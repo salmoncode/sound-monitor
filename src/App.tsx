@@ -1,8 +1,9 @@
 import React from 'react';
 import './App.css';
+import AudioInputDevice from './AudioInputDevice';
 
 interface StateInterface {
-  devices: MediaDeviceInfo[];
+  devices: InputDeviceInfo[];
 }
 
 interface PropsInterface {
@@ -24,7 +25,7 @@ class App extends React.Component<PropsInterface, StateInterface> {
           <button onClick={() => {this._refreshDevices()}}>Refresh</button>
           {
             this.state.devices.map(device =>
-              <p key={device.deviceId}>{device.label}</p>
+              <AudioInputDevice key={device.deviceId} deviceInfo={device} />
             )
           }
         </header>
@@ -34,9 +35,9 @@ class App extends React.Component<PropsInterface, StateInterface> {
 
   private async _refreshDevices() {
     console.log('refresh');
-    const devices = (await navigator.mediaDevices.enumerateDevices()).filter(device => device instanceof InputDeviceInfo);
+    const devices: InputDeviceInfo[] = (await navigator.mediaDevices.enumerateDevices())
+      .filter(device => device instanceof InputDeviceInfo && device.kind === 'audioinput' && device.deviceId !== 'default') as InputDeviceInfo[];
     this.setState({ devices });
-    console.log(this.state);
   }
 }
 
