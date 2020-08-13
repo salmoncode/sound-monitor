@@ -1,26 +1,43 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+interface StateInterface {
+  devices: MediaDeviceInfo[];
+}
+
+interface PropsInterface {
+}
+
+class App extends React.Component<PropsInterface, StateInterface> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      devices: []
+    }
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <p>Hello React</p>
+          <button onClick={() => {this._refreshDevices()}}>Refresh</button>
+          {
+            this.state.devices.map(device =>
+              <p key={device.deviceId}>{device.label}</p>
+            )
+          }
+        </header>
+      </div>
+    );
+  }
+
+  private async _refreshDevices() {
+    console.log('refresh');
+    const devices = (await navigator.mediaDevices.enumerateDevices()).filter(device => device instanceof InputDeviceInfo);
+    this.setState({ devices });
+    console.log(this.state);
+  }
 }
 
 export default App;
