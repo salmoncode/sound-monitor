@@ -36,7 +36,7 @@ class App extends React.Component<PropsInterface, StateInterface> {
   private async _refreshDevices() {
     console.log('refresh');
     const devices: InputDeviceInfo[] = (await navigator.mediaDevices.enumerateDevices())
-      .filter(device => device instanceof InputDeviceInfo && device.kind === 'audioinput' && device.deviceId !== 'default') as InputDeviceInfo[];
+      .filter(device => device.kind === 'audioinput' && device.deviceId !== 'default') as InputDeviceInfo[];
     this.setState({ devices });
   }
 }
