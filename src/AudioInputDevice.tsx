@@ -45,7 +45,6 @@ class AudioInputDevice extends React.Component<PropsInterface, StateInterface> {
   }
 
   private async _start() {
-    if(!this.state.init) {
       const context = new AudioContext();
       const stream = await navigator.mediaDevices.getUserMedia({audio: {deviceId: this.props.deviceInfo.deviceId}});
       const microphone = context.createMediaStreamSource(stream);
@@ -54,18 +53,12 @@ class AudioInputDevice extends React.Component<PropsInterface, StateInterface> {
 
       microphone.connect(analyser);
       analyser.connect(context.destination);
-      this.setState({init: true, context, analyser, dataArray});
+      this.setState({monitoring: true, context, analyser, dataArray});
       this.tick();
-    } else {
-      console.log('resume');
-      this.state.context?.resume();
-    }
-    this.setState({monitoring: true});
   }
 
   private _stop() {
-    console.log('suspend');
-    this.state.context?.suspend();
+    this.state.context?.close();
     this.setState({monitoring: false});
   }
 }
