@@ -1,7 +1,6 @@
 import React from 'react';
 
 interface StateInterface {
-  init: boolean
   monitoring: boolean
   context?: AudioContext
   analyser?: AnalyserNode
@@ -17,7 +16,6 @@ class AudioInputDevice extends React.Component<PropsInterface, StateInterface> {
   constructor(props: any) {
     super(props);
     this.state = {
-      init: false,
       monitoring: false,
       level: 0
     }
