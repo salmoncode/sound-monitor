@@ -3,7 +3,7 @@ import React from 'react';
 interface StateInterface {
   init: boolean
   monitoring: boolean
-  stream?: MediaStream
+  context?: AudioContext
 }
 
 interface PropsInterface {
@@ -27,25 +27,32 @@ class AudioInputDevice extends React.Component<PropsInterface, StateInterface> {
           <button onClick={() => {this._stop()}}>stop</button>:
           <button onClick={() => {this._start()}}>monitoring</button>
         }
-        <audio controls ref={ audio => {
-          if(!audio || !this.state.stream) return;
-          audio.srcObject = this.state.stream
-          }}>
-        </audio>
+        <p></p>
       </div>
     );
   }
 
   private async _start() {
     if(!this.state.init) {
+      const context = new AudioContext();
       const stream = await navigator.mediaDevices.getUserMedia({audio: {deviceId: this.props.deviceInfo.deviceId}});
-      this.setState({init: true, stream});
-    }
+      const microphone = context.createMediaStreamSource(stream);
+      const analyser = context.createAnalyser();
 
+      analyser.smoothingTimeConstant = 0.3;
+      analyser.fftSize = 1024;
+
+      microphone.connect(analyser);
+      analyser.connect(context.destination);
+      this.setState({init: true, context});
+    } else {
+      this.state.context?.resume();
+    }
     this.setState({monitoring: true});
   }
 
   private _stop() {
+    this.state.context?.suspend();
     this.setState({monitoring: false});
   }
 }
