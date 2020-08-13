@@ -19,22 +19,29 @@ class App extends React.Component<PropsInterface, StateInterface> {
 
   render() {
     return (
-      <div className="App">
+      <div className="container">
         <header className="App-header">
-          <p>Sound Monitor</p>
-          <button onClick={() => {this._refreshDevices()}}>Refresh</button>
-          {
-            this.state.devices.map(device =>
-              <AudioInputDevice key={device.deviceId} deviceInfo={device}/>
-            )
-          }
+          <h1>Sound Monitor</h1>
         </header>
+        <main>
+          <section className='refresh-button'>
+            <button onClick={() => {this._refreshDevices()}}>Refresh</button>
+          </section>
+          <section>
+            {
+              this.state.devices.map(device =>
+                <AudioInputDevice key={device.deviceId} deviceInfo={device}/>
+              )
+            }
+          </section>
+        </main>
       </div>
     );
   }
 
   componentDidMount() {
-    this._refreshDevices();
+    this._refreshDevices()
+    setInterval(() => this._refreshDevices(), 1000);
   }
 
   private async _refreshDevices() {

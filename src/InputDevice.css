@@ -1,0 +1,15 @@
+article {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #1a1e23;
+}
+
+.input-device-name {
+  padding-bottom: 1rem;
+}
+
+progress {
+  appearance: none;
+  color: aqua;
+  background-color: aqua;
+}

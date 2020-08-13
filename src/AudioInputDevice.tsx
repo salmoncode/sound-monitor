@@ -1,4 +1,5 @@
 import React from 'react';
+import './InputDevice.css';
 
 interface StateInterface {
   monitoring: boolean
@@ -23,14 +24,16 @@ class AudioInputDevice extends React.Component<PropsInterface, StateInterface> {
 
   render() {
     return (
-      <div className="input-device">
-        <p>{this.props.deviceInfo.label}</p>
+      <article className="input-device">
+        <div className="input-device-name">
+          <p>{this.props.deviceInfo.label}</p>
+        </div>
         {this.state.monitoring ?
           <button onClick={() => {this._stop()}}>stop</button>:
-          <button onClick={() => {this._start()}}>monitoring</button>
+          <button onClick={() => {this._start()}}>play</button>
         }
         <progress max="300" value={this.state.level}></progress>
-      </div>
+      </article>
     );
   }
 
@@ -54,9 +57,14 @@ class AudioInputDevice extends React.Component<PropsInterface, StateInterface> {
 
   private _tick() {
     if(!this.state.analyser || !this.state.dataArray) return;
-    this.state.analyser.getByteTimeDomainData(this.state.dataArray)
-    const level = this.state.dataArray.reduce((a,b)=>Math.max(a,b));
-    this.setState({ level });
+    try{
+      this.state.analyser.getByteTimeDomainData(this.state.dataArray)
+      const level = this.state.dataArray.reduce((a,b)=>Math.max(a,b));
+      this.setState({ level });
+    } catch(e) {
+      console.error(e);
+      return
+    }
     requestAnimationFrame(this._tick.bind(this));
   }
 }
