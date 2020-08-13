@@ -4,6 +4,9 @@ interface StateInterface {
   init: boolean
   monitoring: boolean
   context?: AudioContext
+  analyser?: AnalyserNode
+  dataArray?: Uint8Array
+  level: number
 }
 
 interface PropsInterface {
@@ -15,7 +18,8 @@ class AudioInputDevice extends React.Component<PropsInterface, StateInterface> {
     super(props);
     this.state = {
       init: false,
-      monitoring: false
+      monitoring: false,
+      level: 0
     }
   }
 
@@ -27,9 +31,17 @@ class AudioInputDevice extends React.Component<PropsInterface, StateInterface> {
           <button onClick={() => {this._stop()}}>stop</button>:
           <button onClick={() => {this._start()}}>monitoring</button>
         }
-        <p></p>
+        <progress max="300" value={this.state.level}></progress>
       </div>
     );
+  }
+
+  tick() {
+    if(!this.state.analyser || !this.state.dataArray) return;
+    this.state.analyser.getByteTimeDomainData(this.state.dataArray)
+    const level = this.state.dataArray.reduce((a,b)=>Math.max(a,b));
+    this.setState({ level });
+    requestAnimationFrame(this.tick.bind(this));
   }
 
   private async _start() {
@@ -38,20 +50,21 @@ class AudioInputDevice extends React.Component<PropsInterface, StateInterface> {
       const stream = await navigator.mediaDevices.getUserMedia({audio: {deviceId: this.props.deviceInfo.deviceId}});
       const microphone = context.createMediaStreamSource(stream);
       const analyser = context.createAnalyser();
-
-      analyser.smoothingTimeConstant = 0.3;
-      analyser.fftSize = 1024;
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
       microphone.connect(analyser);
       analyser.connect(context.destination);
-      this.setState({init: true, context});
+      this.setState({init: true, context, analyser, dataArray});
+      this.tick();
     } else {
+      console.log('resume');
       this.state.context?.resume();
     }
     this.setState({monitoring: true});
   }
 
   private _stop() {
+    console.log('suspend');
     this.state.context?.suspend();
     this.setState({monitoring: false});
   }

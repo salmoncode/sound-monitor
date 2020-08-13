@@ -21,11 +21,11 @@ class App extends React.Component<PropsInterface, StateInterface> {
     return (
       <div className="App">
         <header className="App-header">
-          <p>Hello React</p>
+          <p>Sound Monitor</p>
           <button onClick={() => {this._refreshDevices()}}>Refresh</button>
           {
             this.state.devices.map(device =>
-              <AudioInputDevice key={device.deviceId} deviceInfo={device} />
+              <AudioInputDevice key={device.deviceId} deviceInfo={device}/>
             )
           }
         </header>
