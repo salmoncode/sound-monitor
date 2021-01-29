@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/soundMonitor/static/css/main.32453f06.chunk.css",
+    "main.js": "/soundMonitor/static/js/main.a25c5c6c.chunk.js",
+    "main.js.map": "/soundMonitor/static/js/main.a25c5c6c.chunk.js.map",
+    "runtime-main.js": "/soundMonitor/static/js/runtime-main.fb02658d.js",
+    "runtime-main.js.map": "/soundMonitor/static/js/runtime-main.fb02658d.js.map",
+    "static/js/2.b96c3282.chunk.js": "/soundMonitor/static/js/2.b96c3282.chunk.js",
+    "static/js/2.b96c3282.chunk.js.map": "/soundMonitor/static/js/2.b96c3282.chunk.js.map",
+    "index.html": "/soundMonitor/index.html",
+    "precache-manifest.2821e04246cd44f126def664413c6b61.js": "/soundMonitor/precache-manifest.2821e04246cd44f126def664413c6b61.js",
+    "service-worker.js": "/soundMonitor/service-worker.js",
+    "static/css/main.32453f06.chunk.css.map": "/soundMonitor/static/css/main.32453f06.chunk.css.map",
+    "static/js/2.b96c3282.chunk.js.LICENSE.txt": "/soundMonitor/static/js/2.b96c3282.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fb02658d.js",
+    "static/js/2.b96c3282.chunk.js",
+    "static/css/main.32453f06.chunk.css",
+    "static/js/main.a25c5c6c.chunk.js"
+  ]
+}
