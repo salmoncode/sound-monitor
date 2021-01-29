@@ -24,9 +24,6 @@ class App extends React.Component<PropsInterface, StateInterface> {
           <h1>Sound Monitor</h1>
         </header>
         <main>
-          <section className='refresh-button'>
-            <button onClick={() => {this._refreshDevices()}}>Refresh</button>
-          </section>
           <section>
             {
               this.state.devices.map(device =>
@@ -45,7 +42,6 @@ class App extends React.Component<PropsInterface, StateInterface> {
   }
 
   private async _refreshDevices() {
-    console.log('refresh');
     const devices: InputDeviceInfo[] = (await navigator.mediaDevices.enumerateDevices())
       .filter(device => device.kind === 'audioinput' && device.deviceId !== 'default') as InputDeviceInfo[];
     this.setState({ devices });
